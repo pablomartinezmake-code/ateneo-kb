@@ -1,0 +1,18 @@
+#!/bin/sh
+# Ateneo-KB · candado de pre-commit. Se activa con: git config core.hooksPath hooks
+set -e
+
+# `python` en Windows; `python3` donde solo existe ese nombre (macOS, muchos Linux).
+PY=python
+command -v python >/dev/null 2>&1 || PY=python3
+
+# Enlaces de la wiki: aborta si hay alguno roto.
+$PY 04_ops/scripts/wiki_graph.py --strict
+
+# Ningún resumen con forma de fuente, ni sidecar sin procedencia, entra en 01_raw (AGENTS.md, «Ingerir una fuente», paso 1).
+$PY 04_ops/scripts/censo_resumenes_en_raw.py --staged
+
+# Toda ficha de fuente declara forma: (AGENTS.md, «Ingerir una fuente», paso 4).
+$PY 04_ops/scripts/censo_fuentes.py --staged
+
+exit 0

@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Consulta de sala</title>
+<style>
+:root{
+  --paper:#f6f3ee;--card:#fffdf9;--ink:#1c1c18;--ink2:#2b2b2b;--muted:#57544c;--faint:#8a857c;
+  --rule:#dcd7cd;--rule2:#c3bdb0;--blue:#003d9b;--ox:#7c2d12;--mark:#f1e2b8;
+  --display:Georgia,serif;--body:Georgia,serif;--mono:Consolas,monospace;--ui:system-ui,sans-serif;
+  --fs-title:clamp(1.25rem,1.8vw,1.5rem);--fs-label:11px;--fs-micro:9.5px;
+}
+body.ink{--paper:#1a1a16;--card:#232019;--ink:#ece7db;--ink2:#d8d3c8;--muted:#a29c90;--rule:#3b382f;--rule2:#4b473d;--blue:#8fb0e8;--ox:#e6a37f;--mark:#5a4a22}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--ui);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+.masthead{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;padding:22px 32px 14px;border-bottom:1px solid var(--rule2)}
+.wordmark{font-family:var(--display);font-style:italic;font-size:27px;letter-spacing:-.02em}
+.module{font-family:var(--body);font-weight:700;font-size:var(--fs-label);letter-spacing:.16em;text-transform:uppercase;color:var(--blue)}
+.who{font-family:var(--mono);font-size:var(--fs-micro);color:var(--faint);margin-left:auto}
+.mesa{flex:1;min-height:0;display:grid;grid-template-columns:minmax(230px,280px) minmax(300px,1fr) minmax(360px,1.35fr)}
+.col{overflow-y:auto;min-height:0;padding:22px 24px 60px}
+.col+.col{border-left:1px solid var(--rule)}
+h2{font-family:var(--body);font-weight:700;font-size:var(--fs-label);letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin:20px 0 8px}
+h2:first-child{margin-top:0}
+/* Estantería */
+.libro{display:block;width:100%;text-align:left;background:none;border:0;border-left:2px solid transparent;padding:6px 0 7px 9px;cursor:pointer;color:var(--ink)}
+.libro .t{font-family:var(--display);font-size:15px;line-height:1.25}
+.libro .m{display:block;font-family:var(--mono);font-size:var(--fs-micro);color:var(--faint);margin-top:2px}
+.libro .n{font-family:var(--mono);font-size:var(--fs-micro);color:var(--ox);margin-left:6px}
+.libro:hover{border-left-color:var(--rule2)}
+.libro.on{border-left-color:var(--ox)}
+.libro.apagado{opacity:.38}
+.tramo{display:block;width:100%;text-align:left;background:none;border:0;border-left:2px solid transparent;padding:2px 0 3px 22px;cursor:pointer;font-family:var(--display);font-style:italic;font-size:13.5px;line-height:1.3;color:var(--muted)}
+.tramo:hover{border-left-color:var(--rule2);color:var(--ink)}
+.tramo.on{border-left-color:var(--ox);color:var(--ink)}
+.clase-t{font-family:var(--display);font-size:16px;line-height:1.25;margin:-2px 0 2px}
+.clase-q{font-family:var(--display);font-style:italic;font-size:13.5px;line-height:1.35;color:var(--muted);margin-bottom:6px}
+.sin-texto{font-family:var(--body);font-size:12px;line-height:1.5;color:var(--faint);padding:4px 0 6px 11px}
+.leer{font-family:var(--body);font-size:13px;line-height:1.6;color:var(--ink2);margin:0 0 12px}
+/* Búsqueda */
+.caja{width:100%;font-family:var(--display);font-size:22px;padding:6px 2px;border:0;border-bottom:1px solid var(--rule2);background:none;color:var(--ink);outline:none}
+.caja:focus{border-bottom-color:var(--ink)}
+.ayuda{font-family:var(--mono);font-size:var(--fs-micro);color:var(--faint);margin:8px 0 18px;line-height:1.6}
+.cuenta{font-family:var(--body);font-size:13px;color:var(--muted);margin-bottom:14px}
+.cuenta b{color:var(--ink)}
+.grupo{margin-bottom:22px}
+.grupo .gt{font-family:var(--display);font-size:16px;margin-bottom:6px}
+.grupo .gt span{font-family:var(--mono);font-size:var(--fs-micro);color:var(--ox);margin-left:6px}
+.pasaje{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--rule);padding:9px 11px;margin-bottom:6px;cursor:pointer;color:var(--ink2);font-family:var(--body);font-size:13px;line-height:1.55}
+.pasaje:hover{border-color:var(--rule2)}
+.pasaje.on{border-color:var(--ox)}
+.pasaje .e{display:block;font-family:var(--mono);font-size:var(--fs-micro);color:var(--faint);margin-bottom:3px}
+.pasaje .partida{color:var(--ox)}
+.mas{background:none;border:0;border-bottom:1px solid var(--rule2);font-family:var(--mono);font-size:var(--fs-micro);color:var(--muted);cursor:pointer;margin-top:2px}
+.aviso{font-family:var(--body);font-size:13px;line-height:1.6;color:var(--muted);border-left:2px solid var(--rule2);padding-left:12px}
+mark{background:var(--mark);color:inherit;padding:0 1px}
+/* Lector */
+.vacio{font-family:var(--display);font-style:italic;font-size:20px;color:var(--faint);margin-top:40px}
+.lt{font-family:var(--display);font-size:var(--fs-title);line-height:1.25;margin-bottom:4px}
+.lm{font-family:var(--mono);font-size:var(--fs-micro);color:var(--faint);margin-bottom:12px}
+details{margin:6px 0 16px;font-family:var(--body);font-size:13px;line-height:1.6;color:var(--muted)}
+summary{cursor:pointer;font-family:var(--body);font-weight:700;font-size:var(--fs-label);letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+details p{margin-top:8px;white-space:pre-line}
+.nav{display:flex;align-items:baseline;gap:14px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:8px 0;margin-bottom:16px;flex-wrap:wrap}
+.nav button{background:none;border:1px solid var(--rule2);padding:3px 9px;font-family:var(--body);font-size:var(--fs-label);color:var(--muted);cursor:pointer}
+.nav button:disabled{opacity:.35;cursor:default}
+.nav .aqui{font-family:var(--mono);font-size:12px;color:var(--ox)}
+.contexto{font-family:var(--body);font-size:13.5px;line-height:1.7;color:var(--faint);white-space:pre-line;margin-bottom:14px}
+.texto{font-family:var(--body);font-size:15px;line-height:1.8;color:var(--ink);white-space:pre-line;background:var(--card);border:1px solid var(--rule);padding:18px 20px;margin-bottom:14px}
+.vuelta{font-family:var(--mono);font-size:var(--fs-micro);color:var(--faint);line-height:1.8}
+.vuelta a{color:var(--blue)}
+.ficha{font-family:var(--body);font-size:13px;line-height:1.7;color:var(--ink2)}
+.ficha p,.ficha ul,.ficha ol,.ficha blockquote,.ficha table{margin-bottom:14px}
+.ficha ul,.ficha ol{padding-left:20px}
+.ficha blockquote{border-left:2px solid var(--rule2);padding-left:12px}
+.ficha a{color:var(--blue)}
+.ficha .tabla-ficha{overflow-x:auto}
+.ficha table{border-collapse:collapse;width:100%}
+.ficha td,.ficha th{border:1px solid var(--rule);padding:6px;text-align:left}
+.cotejo{margin:8px 0 14px}
+[hidden]{display:none!important}
+.cita{font-family:var(--body);font-size:12.5px;color:var(--muted);margin:14px 0 6px;line-height:1.6}
+.cita code{font-family:var(--mono);font-size:12px;color:var(--ink)}
+.switch{position:fixed;right:14px;bottom:14px;display:flex;border:1px solid var(--rule2);background:var(--card)}
+.switch button{font-family:var(--body);font-weight:700;font-size:var(--fs-label);letter-spacing:.06em;text-transform:uppercase;padding:5px 11px;border:0;background:none;color:var(--muted);cursor:pointer}
+.switch button.on{background:var(--ink);color:var(--card)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (max-width:1100px){.mesa{grid-template-columns:minmax(260px,1fr) minmax(340px,1.4fr)}.estante{grid-column:1/-1;max-height:30vh;border-bottom:1px solid var(--rule)}.col+.col{border-left:0}.resultados{border-right:1px solid var(--rule)}}
+@media (max-width:700px){.masthead{padding:16px 16px 10px}.mesa{display:flex;flex-direction:column;overflow-y:auto}.resultados{order:-2}.lector{order:-1}.col{flex:none;overflow:visible;padding:16px 16px 30px;max-height:none!important}.col+.col{border-top:1px solid var(--rule)}.resultados{border-right:0}}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <span class="wordmark">Ateneo</span>
+  <span class="module" id="nombre-sala">Sala</span>
+  <span class="who" id="who"></span>
+</header>
+<main class="mesa">
+  <nav class="col estante" id="estante" aria-label="Estantería"></nav>
+  <section class="col resultados" aria-label="Búsqueda">
+    <div id="busqueda">
+    <input class="caja" id="caja" type="search" placeholder="Busca un pasaje…" autocomplete="off" aria-label="Buscar en la sala">
+    <p class="ayuda">Todas las palabras en el mismo pasaje · «entre comillas», frase exacta<br>Sin tildes ni mayúsculas · «traduc» encuentra traducción, traductor…</p>
+    <div id="resultados"></div>
+    </div>
+    <div id="ficha-panel" hidden aria-label="Ficha completa" tabindex="-1"></div>
+  </section>
+  <article class="col lector" id="lector" aria-label="Lector"><p class="vacio">Busca algo o elige un libro.</p></article>
+</main>
+<div class="switch" role="group" aria-label="Fondo"><button id="papel" class="on">Papel</button><button id="tinta">Tinta</button></div>
+<script src="datos.js"></script>
+<script src="consulta_sala.js"></script>
+<script>
+"use strict";
+const S = window.SALA, L = S.libros;
+const $ = id => document.getElementById(id);
+
+// Índice: cada unidad, su texto normalizado. Se hace una vez al abrir.
+const t0 = performance.now();
+L.forEach(l => l.u.forEach(u => { u.n = norm(u.t); }));
+const UNIDADES = L.reduce((a, l) => a + l.u.length, 0);
+$("nombre-sala").textContent = S.sala;
+const FORMAS = {libro: ["libro", "libros"], articulo: ["artículo", "artículos"], capitulo: ["capítulo", "capítulos"]};
+const porForma = Object.entries(L.reduce((a, l) => (a[l.forma] = (a[l.forma] || 0) + 1, a), {}))
+  .sort((a, b) => b[1] - a[1]).map(([f, n]) => `${n} ${(FORMAS[f] || [f, f])[n === 1 ? 0 : 1]}`).join(", ");
+$("who").textContent = `consulta local · ${L.length} fuentes (${porForma}) · ${UNIDADES.toLocaleString("es")} unidades · índice en ${Math.round(performance.now() - t0)} ms`;
+document.title = S.sala + " · consulta";
+
+let consulta = null, activo = null, filtro = null, fichaActiva = null, citaActiva = null;
+let scrollBusqueda = 0, sinUnidad = "";
+
+function textoCotejo(l) {
+  const c = l.cotejo || {categoria: "La ficha no lo dice", frase: ""};
+  return `<strong>${esc(c.categoria)}</strong>${c.frase ? ` — ${esc(c.frase)}` : ""}`;
+}
+function pintarFicha() {
+  const panel = $("ficha-panel");
+  $("busqueda").hidden = fichaActiva !== null;
+  panel.hidden = fichaActiva === null;
+  if (fichaActiva === null) return;
+  const l = L[fichaActiva];
+  panel.innerHTML = `<button class="mas" id="volver-busqueda">← volver a la búsqueda</button>
+    <p class="lt">${esc(l.titulo)}</p><div class="aviso cotejo">${textoCotejo(l)}</div>
+    ${sinUnidad ? `<p class="aviso" role="status">${esc(sinUnidad)}</p>` : ""}
+    <div class="ficha">${renderFicha(l.ficha_cuerpo || "Sin ficha.", L, l.actos || [])}</div>`;
+  $("volver-busqueda").onclick = cerrarFicha;
+}
+function verFicha(li) {
+  if (fichaActiva === null) scrollBusqueda = $("resultados").closest(".col").scrollTop;
+  fichaActiva = li; sinUnidad = ""; pintarFicha();
+  $("ficha-panel").closest(".col").scrollTop = 0;
+  $("ficha-panel").focus({preventScroll:true});
+}
+function cerrarFicha() {
+  fichaActiva = null; sinUnidad = ""; pintarFicha();
+  $("resultados").closest(".col").scrollTop = scrollBusqueda;
+  $("caja").focus({preventScroll:true});
+}
+
+function fragmento(texto, rx) {
+  rx.lastIndex = 0;
+  const m = rx.exec(texto); rx.lastIndex = 0;
+  const p = m ? m.index : 0, ini = Math.max(0, p - 150), fin = Math.min(texto.length, p + 230);
+  let s = texto.slice(ini, fin).replace(/\s+/g, " ");
+  return (ini ? "… " : "") + marcar(s, rx) + (fin < texto.length ? " …" : "");
+}
+
+function pintarEstante() {
+  const cuenta = new Map((consulta ? consulta.porLibro : []).map(g => [g.li, g.total]));
+  const boton = (li, meta) => {
+    const l = L[li], n = cuenta.get(li);
+    const cls = ["libro", activo && activo.li === li ? "on" : "", consulta && !n ? "apagado" : ""].join(" ");
+    return `<button class="${cls}" data-li="${li}"><span class="t">${esc(l.titulo)}</span>${n ? `<span class="n" title="apariciones">${n}</span>` : ""}<span class="m">${meta}</span></button>`;
+  };
+  let html = "", sub = null;
+  if (S.estante) {  // sala por programa: por clase; una obra que se lee en dos clases sale en las dos
+    S.estante.forEach(g => {
+      html += `<h2>${esc(g.grupo)}</h2><p class="clase-t">${esc(g.titulo)}</p><p class="clase-q">${esc(g.pregunta)}</p>`;
+      g.items.forEach(it => { html += boton(it.li, `leer: ${esc(it.leer)}${L[it.li].ficha ? "" : " · sin ficha"}`); });
+      g.sin_texto.forEach(e => { html += `<p class="sin-texto">${esc(e)} — sin texto en casa</p>`; });
+    });
+  } else {
+    L.forEach((l, li) => {
+      if (l.subtema !== sub) { sub = l.subtema; html += `<h2>${esc(sub)}</h2>`; }
+      html += boton(li, `${esc(l.forma)}${l.lista ? " · " + esc(l.lista) : ""}${l.capa ? " · " + esc(l.capa) : ""}`);
+      (l.tramos || []).forEach((t, ti) => {  // lecturas dentro del volumen: llevan a la unidad y marcan dónde empiezan
+        const on = activo && activo.li === li && activo.ui === t.ui ? " on" : "";
+        html += `<button class="tramo${on}" data-li="${li}" data-t="${ti}" title="${esc(t.motivo)}">→ ${esc(t.titulo)}</button>`;
+      });
+    });
+  }
+  $("estante").innerHTML = html;
+}
+function pintarResultados() {
+  const r = $("resultados");
+  if (!consulta) { r.innerHTML = ""; return; }
+  const grupos = consulta.porLibro.filter(g => filtro === null || g.li === filtro);
+  const pasajes = grupos.reduce((a, g) => a + g.hits.length, 0);
+  if (!consulta.porLibro.length) {
+    const rotas = L.filter(l => /parte palabras|capa/.test(l.capa)).length;
+    r.innerHTML = `<p class="cuenta"><b>Ningún pasaje</b> con «${esc(consulta.q)}».</p><p class="aviso">Un cero aquí no es un cero. La búsqueda junta las palabras cortadas por el guion de fin de línea y, desde ${PARTIR} letras, las partidas por un espacio; pero no ve las letras que el OCR leyó mal, ni las palabras cortas partidas: en ${rotas} de las ${L.length} fuentes la capa de texto está sucia o parte palabras. Para firmar un «no está», <code>buscar_tolerante.py</code> y la imagen.</p>`;
+    return;
+  }
+  const apariciones = grupos.reduce((a, g) => a + g.total, 0);
+  const partidas = grupos.reduce((a, g) => a + g.hits.reduce((b, h) => b + h.partidas, 0), 0);
+  let html = `<p class="cuenta"><b>${pasajes.toLocaleString("es")}</b> ${pasajes === 1 ? "pasaje" : "pasajes"} en <b>${grupos.length}</b> ${grupos.length === 1 ? "fuente" : "fuentes"} · ${apariciones.toLocaleString("es")} ${apariciones === 1 ? "aparición" : "apariciones"}${partidas ? `, ${partidas} con la palabra partida por un espacio: mirarlas` : ""}${filtro !== null ? ` · <button class="mas" data-quitar>ver toda la sala</button>` : ""}</p>`;
+  grupos.forEach(g => {
+    const l = L[g.li], orden = [...g.hits].sort((a, b) => b.total - a.total);
+    const ver = filtro === g.li ? orden.length : 3;
+    html += `<div class="grupo"><p class="gt">${esc(l.titulo)}<span>${g.hits.length} pas. · ${g.total} apar.</span></p>`;
+    orden.slice(0, ver).forEach(h => {
+      const on = activo && activo.li === g.li && activo.ui === h.ui ? " on" : "";
+      html += `<button class="pasaje${on}" data-li="${g.li}" data-ui="${h.ui}"><span class="e">${esc(l.u[h.ui].e)}${h.partidas ? ` · <span class="partida">${h.partidas === h.total ? "solo" : h.partidas} partida${h.partidas > 1 && h.partidas !== h.total ? "s" : ""}</span>` : ""}</span>${fragmento(l.u[h.ui].t, consulta.marcas)}</button>`;
+    });
+    if (orden.length > ver) html += `<button class="mas" data-filtro="${g.li}">ver los ${orden.length} pasajes de este libro</button>`;
+    html += `</div>`;
+  });
+  r.innerHTML = html;
+}
+function pintarLector() {
+  const z = $("lector");
+  if (!activo) { z.innerHTML = `<p class="vacio">Busca algo o elige un libro.</p>`; return; }
+  const l = L[activo.li], u = l.u[activo.ui], rx = citaActiva ? null : consulta ? consulta.marcas : null;
+  const antes = l.u[activo.ui - 1], despues = l.u[activo.ui + 1];
+  const pag = /^PDF p\. (\d+)(?: (?:izquierda|derecha))?$/.exec(u.e);
+  const original = l.original ? (pag && /\.pdf$/i.test(l.original) ? `${l.original}#page=${pag[1]}` : l.original) : "";
+  const parte = u.e.replace(/ · tramo \d+$/, "");
+  const formaCita = (l.clase === "pdf" || l.clase === "epub-con-folios") ? `«…» — ${u.e}` : l.clase === "epub" ? `«…» — EPUB, «${parte}»` : `«…» — EPUB`;
+  z.innerHTML = `
+    <p class="lt">${esc(l.titulo)}</p>
+    ${l.ficha ? `<button class="mas" id="ver-ficha" aria-controls="ficha-panel">Ficha</button>` : ""}
+    <p class="lm">${esc(l.subtema)} · ${esc(l.forma)}${l.lista ? " · " + esc(l.lista) : ""}${l.capa ? " · " + esc(l.capa) : ""}</p>
+    ${l.leer ? `<p class="leer">${l.leer.map(x => `Clase ${esc(x.clase)}: leer ${esc(x.leer)}`).join("<br>")}</p>` : ""}
+    <p class="vuelta cotejo" title="${esc((l.cotejo || {}).frase || "")}">${textoCotejo(l)}</p>
+    <div class="nav"><button id="ant" ${antes ? "" : "disabled"}>← anterior</button><span class="aqui">${esc(u.e)}</span><button id="sig" ${despues ? "" : "disabled"}>siguiente →</button><span class="lm" style="margin:0">${activo.ui + 1} de ${l.u.length}</span></div>
+    ${antes ? `<div class="contexto">… ${marcar(antes.t.slice(-520), rx)}</div>` : ""}
+    ${citaActiva && !citaActiva.literal ? `<p class="aviso" role="status">la capa no trae esta cita literal: mírala en el original${original ? ` · <a href="${esc(original)}" target="_blank" rel="noopener">abrir el original${pag ? " en esta página" : ""}</a>` : " (sin original enlazado)"}</p>` : ""}
+    <div class="texto">${citaActiva ? marcarCita(u.t, citaActiva.cita, citaActiva.literal) : marcar(u.t, rx)}</div>
+    ${despues ? `<div class="contexto">${marcar(despues.t.slice(0, 520), rx)} …</div>` : ""}
+    <p class="cita">Para la ficha: <code>${esc(formaCita)}</code>${l.clase === "pdf" ? " — página del escaneo, no el folio impreso: antes de citar, mirarla en la imagen." : l.clase === "epub-con-folios" ? " — folio indicado en la transcripción." : l.clase === "epub" ? " — el EPUB no tiene página: se cita por sección." : ` — este EPUB no tiene página ni encabezados: la parte («${esc(parte)}») sale de su primera línea.`}</p>
+    <p class="vuelta">${original ? `<a href="${esc(original)}" target="_blank">abrir el original${pag && /\.pdf$/i.test(l.original) ? " en esta página" : ""}</a> · ` : ""}${l.ficha ? "" : "sin ficha · "}<a href="${esc(l.raw_uri)}" target="_blank">capa de texto</a></p>
+    <p class="vuelta">Testigo: ${esc(l.raw)} — ${esc(l.por)}${l.nombre_original ? `<br>Original: ${esc(l.nombre_original)}` : ""}${l.otros.length ? `<br>Otros en la ficha: ${esc(l.otros.join(" · "))}` : ""}</p>`;
+  $("ant").onclick = () => abrir(activo.li, activo.ui - 1);
+  $("sig").onclick = () => abrir(activo.li, activo.ui + 1);
+  if ($("ver-ficha")) $("ver-ficha").onclick = () => verFicha(activo.li);
+  z.scrollTop = 0;
+  const m = z.querySelector(".texto mark");
+  if (m) m.scrollIntoView({block: "center"});
+}
+function abrir(li, ui, cita = null) {
+  activo = {li, ui}; citaActiva = cita;
+  if (fichaActiva !== null && fichaActiva !== li) { fichaActiva = li; sinUnidad = ""; pintarFicha(); }
+  pintarEstante();
+  // La búsqueda queda montada mientras se consulta la ficha: valor, filtro y scroll intactos.
+  if (fichaActiva === null) pintarResultados();
+  pintarLector();
+}
+
+$("ficha-panel").addEventListener("click", e => {
+  const enlace = e.target.closest("[data-libro]");
+  if (enlace) { const li = +enlace.dataset.libro; abrir(li, 0); verFicha(li); return; }
+  const b = e.target.closest("[data-cita]"); if (!b) return;
+  const l = L[fichaActiva], cita = citasFicha(l.ficha_cuerpo)[+b.dataset.cita];
+  const destino = destinoCita(l, cita);
+  if (destino.ui === null) { sinUnidad = `Sin unidad para ${cita.localizador}: la ficha conserva el localizador; no se sustituye por otro.`; pintarFicha(); return; }
+  sinUnidad = "";
+  abrir(fichaActiva, destino.ui, {cita, literal: destino.literal});
+});
+
+let espera;
+$("caja").addEventListener("input", e => {
+  clearTimeout(espera);
+  espera = setTimeout(() => { consulta = buscar(e.target.value); filtro = null; pintarEstante(); pintarResultados(); }, 220);
+});
+$("estante").addEventListener("click", e => {
+  const t = e.target.closest(".tramo");
+  if (t) { const tr = L[+t.dataset.li].tramos[+t.dataset.t]; return abrir(+t.dataset.li, tr.ui, {cita: {texto: tr.ancla}, literal: true}); }
+  const b = e.target.closest(".libro"); if (!b) return;
+  const li = +b.dataset.li;
+  if (consulta && consulta.porLibro.some(g => g.li === li)) { filtro = filtro === li ? null : li; const g = consulta.porLibro.find(g => g.li === li); abrir(li, [...g.hits].sort((a, b) => b.total - a.total)[0].ui); }
+  else abrir(li, 0);
+});
+$("resultados").addEventListener("click", e => {
+  const p = e.target.closest(".pasaje"); if (p) return abrir(+p.dataset.li, +p.dataset.ui);
+  const f = e.target.closest("[data-filtro]"); if (f) { filtro = +f.dataset.filtro; pintarResultados(); return; }
+  if (e.target.closest("[data-quitar]")) { filtro = null; pintarResultados(); }
+});
+const fondo = ink => { document.body.classList.toggle("ink", ink); $("papel").classList.toggle("on", !ink); $("tinta").classList.toggle("on", ink); try { localStorage.setItem("consulta-fondo", ink ? "tinta" : "papel"); } catch (_) {} };
+$("papel").onclick = () => fondo(false); $("tinta").onclick = () => fondo(true);
+try { if (localStorage.getItem("consulta-fondo") === "tinta") fondo(true); } catch (_) {}
+pintarEstante();
+</script>
+</body>
+</html>

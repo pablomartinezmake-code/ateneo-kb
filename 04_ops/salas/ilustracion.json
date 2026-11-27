@@ -1,0 +1,21 @@
+{
+  "titulo": "Ilustración",
+  "etiqueta": "filosofia",
+  "vocabulario": "ilustra|aufklär|unmündig|verstand",
+  "umbral_ficha": 3,
+  "umbral_raw_por_mil": 3,
+  "subtemas": [
+    [
+      "Uso público de la razón",
+      "kant|aufklär|ilustra"
+    ]
+  ],
+  "ratificados": [],
+  "descartados": [],
+  "excluir_carpetas": [
+    "01_raw/reference-links/"
+  ],
+  "folios_en_corchetes": [
+    "01_raw/books/kant-1784-was-ist-aufklaerung-wikisource.md"
+  ]
+}

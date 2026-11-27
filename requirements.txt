@@ -1,0 +1,12 @@
+# Conversión de PDF y EPUB, y medida de la capa de texto
+pymupdf>=1.27
+pymupdf4llm>=1.27
+markitdown>=0.1
+beautifulsoup4>=4.12
+markdownify>=1.1
+
+# Pruebas
+pytest>=8
+
+# Opcional: reconocimiento óptico de PDF sin capa de texto (--converter rapidocr)
+# rapidocr-onnxruntime>=1.2

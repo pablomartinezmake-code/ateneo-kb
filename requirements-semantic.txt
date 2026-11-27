@@ -1,0 +1,9 @@
+# Opcional: búsqueda por sentido en una sala (04_ops/scripts/indexar_sentido.py y buscar_sentido.py).
+# Se instala aparte de requirements.txt:  pip install -r requirements-semantic.txt
+#
+# sentence-transformers trae PyTorch (de 200 MB a 2,5 GB según la plataforma y si es con CUDA).
+# La primera vez se descargan los modelos y quedan en la caché de Hugging Face; después, sin conexión:
+#   BAAI/bge-m3                ~2,2 GB  (siempre)
+#   BAAI/bge-reranker-v2-m3    ~2,2 GB  (solo con --reranker)
+numpy>=1.24
+sentence-transformers>=3.0

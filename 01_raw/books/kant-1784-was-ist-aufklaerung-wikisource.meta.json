@@ -1,0 +1,78 @@
+{
+  "source_path": "00_inbox/kant-1784-was-ist-aufklaerung-wikisource.epub",
+  "original_copy": "01_raw/papers/kant-1784-was-ist-aufklaerung-wikisource.epub",
+  "original_preserved": true,
+  "preservation_mode": "copied",
+  "converter": "epub_clean",
+  "converted_at": "2026-11-25T12:41:16.381312Z",
+  "input_extension": ".epub",
+  "text_layer_fidelity": {
+    "detector": "2026-09-28.1-kb",
+    "detector_origin": "mesa-de-traduccion/corpus/biblioteca/fidelidad.py",
+    "unit": "whole_file",
+    "words": 3060,
+    "marks": {
+      "digit": 0,
+      "sign": 10,
+      "vowelless": 1
+    },
+    "consonants_informational": 107,
+    "acronyms_skipped": 0,
+    "y_as_vowel_skipped": 0,
+    "strong_marks": 11,
+    "per_thousand_words": 3.595,
+    "units_affected": 1,
+    "units_total": 1,
+    "distinct_mark_ratio": 0.2,
+    "distinct_marks": 2,
+    "most_repeated_marks": [
+      {
+        "token": "cite_note",
+        "count": 5
+      },
+      {
+        "token": "cite_ref",
+        "count": 5
+      }
+    ],
+    "diacritics_language": "de",
+    "diacritics_per_thousand": 16.21,
+    "diacritics_language_detected": true,
+    "wordlike_errors": {
+      "detector": "2026-10-04.2",
+      "words": 2974,
+      "occurrences": 0,
+      "distinct_candidates": 0,
+      "per_thousand_words": 0.0,
+      "review_threshold": 0.5,
+      "decision": "below_alert_not_proof_of_clean_text",
+      "parameters": {
+        "min_length": 4,
+        "min_reference_count": 20,
+        "max_frequency_ratio": 0.4,
+        "substitutions": "b/h, case-sensitive"
+      },
+      "candidates": []
+    },
+    "control_characters": {
+      "detector": "2026-10-13.1-controls",
+      "total": 0,
+      "inside_word": 0,
+      "between_letter_runs": 0,
+      "by_codepoint": {},
+      "by_species": {
+        "possible_ligature": 0,
+        "page_break": 0,
+        "broken_encoding": 0
+      },
+      "samples": [],
+      "decision": "no_interior_controls_not_proof_of_clean_text"
+    }
+  },
+  "invisibles": {
+    "guion_blando": 0,
+    "guion_blando_parte_palabra": 0,
+    "nul": 0,
+    "ligaduras": 0
+  }
+}
