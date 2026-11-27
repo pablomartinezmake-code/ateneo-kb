@@ -4,7 +4,7 @@
 
 *No catalogue has ever read a book.*
 
-https://github.com/user-attachments/assets/6023bd31-1caf-43ec-819a-844a193d8e6e
+https://github.com/user-attachments/assets/9fd049a0-eb92-45f7-ac21-7109b7ae1103
 
 AI agents hardly ever invent books any more. They now invent something harder to see: the sentence in quotation marks, attributed to a book that exists, in a chapter that exists, saying exactly what the researcher hoped to read. The catalogue confirms the author, the title and the ISBN. Only opening the page can refute the sentence.
 

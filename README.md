@@ -4,7 +4,7 @@
 
 *Ningún catálogo ha leído un libro.*
 
-https://github.com/user-attachments/assets/9fd049a0-eb92-45f7-ac21-7109b7ae1103
+https://github.com/user-attachments/assets/6023bd31-1caf-43ec-819a-844a193d8e6e
 
 Un agente de IA ya casi no se inventa libros. Ahora inventa algo más difícil de ver: la frase entre comillas, atribuida a un libro que existe, en un capítulo que existe, que dice justo lo que el investigador quería leer. El catálogo confirma el autor, la obra y el ISBN. Solo abrir la página desmiente la frase.
 
