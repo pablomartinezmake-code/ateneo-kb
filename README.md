@@ -4,6 +4,8 @@
 
 *Ningún catálogo ha leído un libro.*
 
+https://github.com/user-attachments/assets/9fd049a0-eb92-45f7-ac21-7109b7ae1103
+
 Un agente de IA ya casi no se inventa libros. Ahora inventa algo más difícil de ver: la frase entre comillas, atribuida a un libro que existe, en un capítulo que existe, que dice justo lo que el investigador quería leer. El catálogo confirma el autor, la obra y el ISBN. Solo abrir la página desmiente la frase.
 
 Ateneo-KB es el sistema con el que trabajo una biblioteca de investigación junto a varios agentes (Codex, Claude, Gemini) sin perder el camino de vuelta a la página. No trae libros ni modelos dentro: trae las reglas, las herramientas y los candados.
